@@ -22,17 +22,17 @@
 
     <data>
         <variable
-            name="viewModel"
-            type="com.example.android.marsphotos.overview.OverviewViewModel" />
+            name="photo"
+            type="com.example.android.marsphotos.data.MarsPhotoModel" />
     </data>
 
     <ImageView
         android:id="@+id/mars_image"
         android:layout_width="wrap_content"
-        app:imageUrl="@{viewModel.realEstate.img_src}"
+        app:imageUrl="@{photo.img_src}"
         android:layout_height="170dp"
         android:scaleType="fitXY"
+        android:padding="6dp"
         android:adjustViewBounds="true"
-        android:padding="2dp"
         tools:src="@tools:sample/backgrounds/scenic"/>
 </layout>
