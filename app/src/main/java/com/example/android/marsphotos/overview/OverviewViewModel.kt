@@ -25,16 +25,17 @@ import com.example.android.marsphotos.data.MarsRealEstateModel
 import com.example.android.marsphotos.network.MarsApi
 import kotlinx.coroutines.launch
 
+enum class MarsApiStatus { LOADING, ERROR, DONE }
 
 class OverviewViewModel : ViewModel() {
 
 
-    private val _status = MutableLiveData<String>()
+    private val _status = MutableLiveData<MarsApiStatus>()
     private val _realEstate = MutableLiveData<MarsRealEstateModel>()
     private  val _photos = MutableLiveData<List<MarsPhotoModel>>()
 
 
-    val status: LiveData<String> = _status
+    val status: LiveData<MarsApiStatus> = _status
     val realEstate : LiveData<MarsRealEstateModel> = _realEstate
     val photos : LiveData<List<MarsPhotoModel>> = _photos
 
@@ -46,14 +47,16 @@ class OverviewViewModel : ViewModel() {
     private fun getMarsPhotos() {
 
         viewModelScope.launch {
+            _status.value = MarsApiStatus.LOADING
             try {
                // val data = MarsApi.retrofitService.getRealEstate()
                 _photos.value = MarsApi.retrofitService.getPhotos()
-                _status.value = "Success: Mars properties retrieved"
+                _status.value = MarsApiStatus.DONE
                // _status.value = data.toString()
             }catch (e: Exception){
                 e.printStackTrace()
-                _status.value = "Failure: ${e.message}"
+                _status.value = MarsApiStatus.ERROR
+                _photos.value = listOf()
                     //_status.value = "Failure: ${e.message}"
                // _realEstate.value = MarsApi.retrofitService.getRealEstate()[0]
                // _status.value = "   First Mars image URL : ${_realEstate.value!!.img_src}"
